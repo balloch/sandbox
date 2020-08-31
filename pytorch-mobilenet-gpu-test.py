@@ -104,6 +104,7 @@ def evaluate(model, criterion, testloader, epoch):
 
 
 parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
+parser.add_argument('--device', default='cuda', type=str, help='device to force CPU')
 parser.add_argument('--lr', default=0.05, type=float, help='learning rate')
 parser.add_argument('--epochs', default=100, type=int, help='total training epochs')
 parser.add_argument('--sched_step', default=25, type=int, help='when scheduler reduces lr')
@@ -112,7 +113,8 @@ parser.add_argument('--val_batch', default=0, type=int, help='val batch size if 
 parser.add_argument('--resume_checkpoint', default=None, type=str, help='resume from checkpoint')
 args = parser.parse_args()
 
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+device = args.device if torch.cuda.is_available() else 'cpu'  # default is cuda
+
 model = torch.hub.load('pytorch/vision:v0.6.0', 'mobilenet_v2', pretrained=False).to(device)
 criterion = nn.CrossEntropyLoss()
 
